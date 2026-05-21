@@ -22,7 +22,7 @@ jobs:
         run: |
           cd ssh2
           ./change_ip.sh &
-           node mcbotv2.js 45.126.208.51 25575 13444 300 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
+           node mcbotv2.js 131.196.198.112 25575 13444 300 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
           
       - name: Limpiar
         if: always()
