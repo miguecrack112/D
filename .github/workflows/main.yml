@@ -14,7 +14,7 @@ jobs:
           
       - name: Clonar repositorio
         run: |
-          git clone https://github.com/ricardocraft121-gif/ssh2.git
+          git clone https://github.com/Nekotina532/ssh2.git
           cd ssh2
           chmod +x change_ip.sh
           
